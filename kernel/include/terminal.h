@@ -28,10 +28,10 @@ uint32_t row;
 uint32_t column;
 VGA_COLOR  text_color;
 VGA_COLOR background_color;
-uint16_t text_color_attrib;
-volatile uint16_t* vid_mem;
+uint8_t text_color_attrib;
+uint16_t* vid_mem;
 
 void set_text_color(VGA_COLOR text_color);
-void set_init_terminal(uint8_t background_color);
+void init_terminal(uint8_t text, uint8_t background);
 
 #endif

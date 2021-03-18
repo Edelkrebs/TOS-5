@@ -2,15 +2,14 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#include <terminal.h>
+#include <printk.h>
+#include <stdio.h>
+
 void kmain(void) 
 {
 
-	uint8_t c = 'E';
-	uint8_t bg = 0x0F;
-	uint16_t* mem = (uint16_t*) 0xb8000;
-
-	uint16_t entry = (bg << 8) | c;
-
-	*mem = entry;
-
+	init_terminal(VGA_WHITE, VGA_BLACK);
+	printk("Hello W\norld!\0", 0, 10);	
+	
 }

@@ -1,4 +1,4 @@
-#include "../include/terminal.h"
+#include <terminal.h>
 #include <stdint.h>
 
 static inline uint8_t gen_color(VGA_COLOR text, VGA_COLOR background){
@@ -22,6 +22,7 @@ void init_terminal(uint8_t text, uint8_t background){
 	column = 0;
 	text_color = text;
 	background_color = background;
+	text_color_attrib = gen_color(text_color, background_color);
 	vid_mem = (uint16_t*) 0xb8000;
 }
 

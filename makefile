@@ -4,7 +4,7 @@ OBJECTS := $(SOURCES:.c=.o) $(ASMSOURCES:.asm=.o)
 
 ASFLAGS = -f elf32
 LDFLAGS = -T linker.ld -ffreestanding -O2 -nostdlib -lgcc
-CFLAGS = -c -std=gnu99 -ffreestanding -O2 -Wall -Werror -c
+CFLAGS = -c -std=gnu99 -ffreestanding -O2 -Wall -Werror -I kernel/include -c
 
 AS = nasm
 CC = i686-elf-gcc
