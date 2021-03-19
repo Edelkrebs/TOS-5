@@ -16,16 +16,18 @@ int printk(const char* str, uint32_t r, uint32_t col){
 
 	if(!str) return 1;
 
-	size_t string_index = 0;
+	row = r;
+	column = col;
 	for(size_t i = 0; i <= strlen(str); i++){
 		if(str[i] == '\n'){
-			r++;
-			string_index = r;
+			i++;
+			row++;
+			column = 0;
 			continue;
 		}
-		*(coords_to_address(r, col + string_index)) = generate_entry(str[i], text_color_attrib);
-		string_index++;
+		*(coords_to_address(row, column)) = generate_entry(str[i], text_color_attrib);
+		column++;
 	}
-
+	
 	return 0;
 }

@@ -10,6 +10,7 @@ void kmain(void)
 {
 
 	init_terminal(VGA_WHITE, VGA_BLACK);
-	printk("Hello W\norld!\0", 0, 10);	
+	cls();
+	print("Hello World!\n");
 	
 }
