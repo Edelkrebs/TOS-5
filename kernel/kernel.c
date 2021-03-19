@@ -3,7 +3,7 @@
 #include <stdint.h>
 
 #include <terminal.h>
-#include <printk.h>
+#include <debug.h>
 #include <stdio.h>
 
 void kmain(void) 
@@ -11,6 +11,6 @@ void kmain(void)
 
 	init_terminal(VGA_WHITE, VGA_BLACK);
 	cls();
-	print("Hello World!\n");
-	
+	printregs();
+	error("KERNEL PANICED!");
 }

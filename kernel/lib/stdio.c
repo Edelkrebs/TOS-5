@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <terminal.h>
-#include <printk.h>
+#include <debug.h>
 
 static inline uint16_t generate_entry(char character, uint8_t color){
 	return (color << 8) | character;
@@ -14,7 +14,16 @@ void cls(){
 	column = 0;
 }
 
-int print(const char* str){
-	int i = printk(str, row, column);
+int putch(char c){
+	return kputch(c, row, column);
+}
+
+int println(const char* str){
+	int i = print(str);
+	i &= putch('\n');
 	return i;
+}
+
+int print(const char* str){
+	return printk(str, row, column);
 }

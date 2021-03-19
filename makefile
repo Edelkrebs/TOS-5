@@ -6,22 +6,24 @@ ASFLAGS = -f elf32
 LDFLAGS = -T linker.ld -ffreestanding -O2 -nostdlib -lgcc
 CFLAGS = -c -std=gnu99 -ffreestanding -O2 -Wall -Werror -I kernel/include -c
 
+BIN = bin/tos-5.bin
+ISO = bin/tos-5.iso
 AS = nasm
 CC = i686-elf-gcc
 
 all: kernel 	
 run: all
-	qemu-system-i386 -kernel bin/tos-5.bin -d int -D qlog.txt
+	qemu-system-i386 -kernel $(BIN) -d int -D qlog.txt
 
 image: all
 	mkdir -p iso/boot/grub
-	cp bin/tos-5.bin iso/boot/tos-5.bin
+	cp $(BIN) iso/boot/tos-5.bin
 	cp grub.cfg iso/boot/grub/grub.cfg
-	grub-mkrescue -o bin/tos-5.iso iso
-	qemu-system-i386 -cdrom bin/tos-5.iso -d int -D qlogimg.txt
+	grub-mkrescue -o $(ISO) iso
+	qemu-system-i386 -cdrom $(ISO) -d int -D qlogimg.txt
 	
 kernel: $(OBJECTS)
-	$(CC) $(LDFLAGS) $^ -o bin/tos-5.bin 
+	$(CC) $(LDFLAGS) $^ -o $(BIN) 
 
 %.o:%.asm
 	mkdir -p boot	
@@ -31,4 +33,5 @@ kernel: $(OBJECTS)
 	mkdir -p bin
 	$(CC) $< -o $@ $(CFLAGS)
 
-
+clear:
+	rm -rf $(OBJECTS) $(BIN)

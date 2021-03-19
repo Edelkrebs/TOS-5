@@ -2,7 +2,8 @@
 #define __STDIO_H
 
 void cls();
-void printRegs();
+int putch(char c);
 int print(const char* str);
+int println(const char* str);
 
 #endif
