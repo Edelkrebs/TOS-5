@@ -1,4 +1,3 @@
-#include <printk.h>
 #include <terminal.h>
 #include <string.h>
 #include <stdint.h>
@@ -12,7 +11,7 @@ static inline uint16_t generate_entry(char character, uint8_t color){
 	return (color << 8) | character;
 }
 
-int printk(const char* str, uint32_t r, uint32_t col){
+uint32_t printk(const char* str, uint32_t r, uint32_t col){
 
 	if(!str) return 1;
 
@@ -34,19 +33,19 @@ int printk(const char* str, uint32_t r, uint32_t col){
 	return 0;
 }
 
-int kputch(char c, uint32_t r, uint32_t col){
+uint32_t kputch(char c, uint32_t r, uint32_t col){
 	if(c == '\n'){
 		row++;
 		column = 0;
 		return 0;
 	}
 	*(coords_to_address(r, col)) = generate_entry(c, text_color_attrib);
-	col++;
-
+	column++;
+	
 	return 0;
 }
 
-int printhex(uint32_t number){
+uint32_t printhex(uint32_t number){
 	char* str =  "0x00000000";
 	uint32_t numbercpy = number;
 	for(int i = 9; i > 4; i--){
@@ -88,7 +87,7 @@ void printregs(){
 	printreg(3);
 }
 
-int warn(const char* str){
+uint32_t warn(const char* str){
 	uint32_t t_color = text_color;
 	set_text_color(VGA_LIGHT_CYAN);
 	int i = printk("[WARNING] ", row, column);
@@ -97,7 +96,7 @@ int warn(const char* str){
 	return i & j;
 }
 
-int error(const char* str){
+uint32_t error(const char* str){
 	uint32_t t_color = text_color;
 	set_text_color(VGA_RED);
 	int i = printk("[ERROR] ", row, column);
@@ -105,4 +104,26 @@ int error(const char* str){
 	int j = printk(str, row, column);
 	set_text_color(t_color);
 	return i & j;
+}
+
+void cls(){
+	for(int i = 0; i <= width * height; i++){
+		*((uint16_t*) 0xb8000 + i) = generate_entry(' ', text_color_attrib);
+	}
+	row = 0;
+	column = 0;
+}
+
+uint32_t putch(char c){
+	return kputch(c, row, column);
+}
+
+uint32_t println(const char* str){
+	int i = printk(str, row, column);
+	i &= kputch('\n', row, column);
+	return i;
+}
+
+uint32_t print(const char* str){
+	return printk(str, row, column);
 }

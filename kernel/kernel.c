@@ -4,7 +4,6 @@
 
 #include <terminal.h>
 #include <debug.h>
-#include <stdio.h>
 
 void kmain(void) 
 {
@@ -13,4 +12,5 @@ void kmain(void)
 	cls();
 	printregs();
 	error("KERNEL PANICED!");
+
 }
