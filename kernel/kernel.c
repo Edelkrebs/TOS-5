@@ -3,14 +3,22 @@
 #include <stdint.h>
 
 #include <terminal.h>
-#include <printk.h>
-#include <stdio.h>
+#include <debug.h>
+#include <multiboot.h>
+#include <pmm.h>
 
-void kmain(void) 
+struct multiboot_info* multiboot;
+
+void kmain(struct multiboot_info* mboot_info) 
 {
 
+	multiboot = mboot_info;
+
+	init_bitmap
 	init_terminal(VGA_WHITE, VGA_BLACK);
 	cls();
-	print("Hello World!\n");
+	printregs();
 	
+	while(1);
+
 }

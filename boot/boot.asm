@@ -10,21 +10,28 @@ dd MAGIC
 dd FLAGS
 dd CHECKSUM
 
+multiboot_info dd 0
+
 section .bss
 align 16
 stack_bottom:
 resb 16384
 stack_top:
 
+
 section .text
 global _start:function (_start.end - _start)
 _start:
+
+	mov dword [multiboot_info], ebx
+
 	mov esp, stack_top
 	mov ebp, esp
 
 	call init_gdt
 
 	extern kmain
+	push dword [multiboot_info]
 	call kmain
 
 	cli
