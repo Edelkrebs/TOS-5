@@ -46,9 +46,9 @@ uint32_t kputch(char c, uint32_t r, uint32_t col){
 }
 
 uint32_t printhex(uint32_t number){
-	char* str =  "0x00000000";
+	char* str =  "0x00000000\0";
 	uint32_t numbercpy = number;
-	for(int i = 9; i > 4; i--){
+	for(int i = 9; i > 2; i--){
 		number = numbercpy;
 		numbercpy = numbercpy >> 4;
 		number &= 0xF;

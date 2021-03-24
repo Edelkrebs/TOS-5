@@ -6,11 +6,10 @@ CHECKSUM equ -(MAGIC + FLAGS)
 
 section .multiboot
 align 4
-dd MAGIC
-dd FLAGS
-dd CHECKSUM
+	dd MAGIC
+	dd FLAGS
+	dd CHECKSUM
 
-multiboot_info dd 0
 
 section .bss
 align 16
@@ -23,15 +22,12 @@ section .text
 global _start:function (_start.end - _start)
 _start:
 
-	mov dword [multiboot_info], ebx
-
 	mov esp, stack_top
-	mov ebp, esp
 
 	call init_gdt
 
 	extern kmain
-	push dword [multiboot_info]
+	push ebx
 	call kmain
 
 	cli
@@ -74,3 +70,5 @@ gdt_end:
 gdt_attribs:
 	dw gdt_end - gdt - 1
 	dd gdt
+
+multiboot_info dd 0

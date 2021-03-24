@@ -3,20 +3,20 @@
 
 #include <stdint.h>
 
-struct __attribute__((packed)) multiboot_info{
-	uint32_t flags;
-	uint32_t mem_lower;
-	uint32_t mem_upper;
-	uint32_t boot_device;
-	uint32_t cmdline;
-	uint32_t mods_count;
-	uint32_t* mods_addr;
-	uint32_t syms1;
-	uint32_t syms2;
-	uint32_t syms3;
-	uint32_t syms4;
-	uint32_t mmap_length;
-	uint32_t mmap_addr;
+struct multiboot_info{
+	uint32_t flags; // 0 
+	uint32_t mem_lower; // 4
+	uint32_t mem_upper; // 8
+	uint32_t boot_device; // 12
+	uint32_t cmdline; // 16
+	uint32_t mods_count; // 20
+	void* mods_addr; // 24
+	uint32_t syms1; // 28
+	uint32_t syms2; // 32
+	uint32_t syms3; // 36
+	uint32_t syms4; // 40
+	uint32_t mmap_length; // 44
+	void* mmap_addr;
 	uint32_t drives_length;
 	uint32_t drives_addr;
 	uint32_t config_table;
@@ -40,6 +40,6 @@ struct __attribute__((packed)) multiboot_info{
 	uint16_t color_info_1;
 	uint16_t color_info_2;
 	uint16_t color_info_3;
-}; 
+}__attribute__((packed)) ; 
 
 #endif

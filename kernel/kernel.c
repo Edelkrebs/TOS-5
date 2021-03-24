@@ -5,7 +5,7 @@
 #include <terminal.h>
 #include <debug.h>
 #include <multiboot.h>
-#include <pmm.h>
+#include <mm/pmm.h>
 
 struct multiboot_info* multiboot;
 
@@ -14,11 +14,11 @@ void kmain(struct multiboot_info* mboot_info)
 
 	multiboot = mboot_info;
 
-	init_bitmap
 	init_terminal(VGA_WHITE, VGA_BLACK);
 	cls();
 	printregs();
-	
+	init_bitmap(multiboot);
+
 	while(1);
 
 }

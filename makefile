@@ -13,14 +13,16 @@ CC = i686-elf-gcc
 
 all: kernel 	
 run: all
-	qemu-system-i386 -kernel $(BIN) -d int -D qlog.txt
+	mkdir -p log
+	qemu-system-i386 -m 1G -kernel $(BIN) -d int -D log/qlog.txt -no-shutdown -no-reboot
 
 image: all
 	mkdir -p iso/boot/grub
+	mkdir -p log
 	cp $(BIN) iso/boot/tos-5.bin
 	cp grub.cfg iso/boot/grub/grub.cfg
 	grub-mkrescue -o $(ISO) iso
-	qemu-system-i386 -cdrom $(ISO) -d int -D qlogimg.txt
+	qemu-system-i386 -cdrom $(ISO) -m 1G -no-reboot -monitor stdio -d int -D log/qlog.txt -no-shutdown
 	
 kernel: $(OBJECTS)
 	$(CC) $(LDFLAGS) $^ -o $(BIN) 
