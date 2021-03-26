@@ -16,7 +16,6 @@ void kmain(struct multiboot_info* mboot_info)
 
 	init_terminal(VGA_WHITE, VGA_BLACK);
 	cls();
-	printregs();
 	init_bitmap(multiboot);
 	populate_bitmap(multiboot);
 
