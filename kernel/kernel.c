@@ -5,6 +5,7 @@
 #include <mm/pmm.h>
 #include <debug.h>
 #include <terminal.h>
+#include <util/maths.h>
 
 struct multiboot_info* multiboot;
 

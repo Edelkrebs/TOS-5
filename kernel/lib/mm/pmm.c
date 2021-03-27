@@ -11,6 +11,8 @@ typedef struct{
 	
 }__attribute__((packed)) mmap_entry;
 
+uint16_t number_of_entrys; 
+
 void bitmap_setb(uint32_t index){
 	bitmap[index / 8] |= 1 << (index % 8);
 }
@@ -19,36 +21,36 @@ void bitmap_clearb(uint32_t index){
 	bitmap[index / 8] &= ~(1 << (index % 8));
 }
 
-uint32_t bitmap_index(uint32_t* base, uint32_t length){
-	return (uint32_t)base / block_size / 8 + length / block_size / 8; 	
-}
-
 void init_bitmap(struct multiboot_info* mboot){
+
+	kernel_size = &_kernel_end - &_kernel_start;
 	
 	for(int i = 0; i < mboot->mmap_length;){
 		mmap_entry* entry = mboot->mmap_addr + i;
-		if((uint64_t)entry->base + entry->len > UINT32_MAX){
-			entry->len = (uint64_t) UINT32_MAX - entry->len; 
-		}
 		i += entry->size + 4;
-		memory_length += entry->len;
-	}	
+		memory_length += entry->len;;
+	}
 
 	print("Total memory: ");
-	printhex(memory_length);
+	printhex64(memory_length);
+	print("Kernel start: ");
+	printhex((uint32_t)&_kernel_start);
+	print("Kernel end: ");
+	printhex((uint32_t)&_kernel_end);
+	print("Kernel size: ");
+	printhex(kernel_size);
 
-	arena_addr = (void*) 0;
 	block_size = 4096;
 	block_limit = memory_length / block_size;
 	bitmap_size = memory_length / block_size / 8;
 
-	for(int i = 0; i < mboot->mmap_length;){
+	for(int i = 0; i < number_of_entrys;){
 		mmap_entry* entry = mboot->mmap_addr + i;
 		if(entry->type == 1 && entry->len >= bitmap_size){
 			bitmap = (uint8_t*)((uint32_t)entry->base);
 			break;
 		} 
-		i += entry->size + 4;
+		i += entry->size + 4; 
 	}
 	
 }
@@ -67,7 +69,6 @@ void populate_bitmap(struct multiboot_info* mboot){
 	for(int i = 0; i < bmap_block_size; i++){ // Allocate part of the bitmap which the bitmap takes up by itself
 		bitmap_setb((uint32_t)bitmap / block_size + i);
 	}
-
 	
 	for(int i = 0; i < mboot->mmap_length;){ // Populate the bitmap according to the memory map
 		const mmap_entry* entry = mboot->mmap_addr + i;
@@ -78,9 +79,12 @@ void populate_bitmap(struct multiboot_info* mboot){
 		for(int j = 0; j < (uint32_t)entry->len / block_size; j++){
 			bitmap_setb((uint32_t) entry->base / block_size + j);
 		}
-	
+
 		i += entry->size + 4; 
 	}
 
+	for(int i = 0; i <= kernel_size / block_size; i++){
+		bitmap_setb((uint32_t)&_kernel_start / block_size + i);
+	}
 
 }

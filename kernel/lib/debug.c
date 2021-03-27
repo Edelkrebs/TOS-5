@@ -48,7 +48,7 @@ uint32_t kputch(char c, uint32_t r, uint32_t col){
 uint32_t printhex(uint32_t number){
 	char* str =  "0x00000000\0";
 	uint32_t numbercpy = number;
-	for(int i = 9; i > 2; i--){
+	for(int i = 9; i > 1; i--){
 		number = numbercpy;
 		numbercpy = numbercpy >> 4;
 		number &= 0xF;
@@ -58,6 +58,21 @@ uint32_t printhex(uint32_t number){
 	printk(str, row, column);
 	kputch('\n', row, column);
 	return 1;
+}
+
+uint32_t printhex64(uint64_t number){
+	char* str =  "0x0000000000000000\0";
+	uint64_t numbercpy = number;
+	for(int i = 17; i > 1; i--){
+		number = numbercpy;
+		numbercpy = numbercpy >> 4;
+		number &= 0xF;
+		if(number > 9) str[i] = number + 'A' - 10;
+		else str[i] = number + '0';
+	}
+	printk(str, row, column);
+	kputch('\n', row, column);
+	return 1;	
 }
 
 void printreg(uint8_t reg){

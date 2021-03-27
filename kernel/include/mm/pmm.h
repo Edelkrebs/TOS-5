@@ -4,13 +4,16 @@
 #include <stdint.h>
 #include <multiboot.h>
 
+extern uint8_t _kernel_start;
+extern uint8_t _kernel_end;
+
 uint8_t* bitmap;
-void* arena_addr;
 uint32_t block_size;
 uint32_t block_limit;
 uint32_t bitmap_size;
 	
-uint32_t memory_length = 0;
+uint64_t memory_length;
+uint32_t kernel_size;
 
 void bitmap_setb(uint32_t index);
 void bitmap_clearb(uint32_t index);

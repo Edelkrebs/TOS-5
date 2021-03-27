@@ -6,6 +6,7 @@
 uint32_t kputch(char c, uint32_t row, uint32_t column);
 uint32_t printk(const char* str, uint32_t row, uint32_t column);
 uint32_t printhex(uint32_t number);
+uint32_t printhex64(uint64_t number);
 void printreg(uint8_t reg);
 void printregs();
 
