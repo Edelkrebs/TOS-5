@@ -1,5 +1,5 @@
 #ifndef __PMM_H
-#define __PM_H
+#define __PMM_H
 
 #include <stdint.h>
 #include <multiboot.h>
@@ -10,7 +10,7 @@ uint32_t block_size;
 uint32_t block_limit;
 uint32_t bitmap_size;
 	
-uint32_t memory_size = 0;
+uint32_t memory_length = 0;
 
 void bitmap_setb(uint32_t index);
 void bitmap_clearb(uint32_t index);
