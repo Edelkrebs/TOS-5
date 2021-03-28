@@ -120,6 +120,8 @@ void* pmm_alloc(uint32_t size){
 	return (void*) 0;	
 }
 
-void pmm_free(void* paddr, uint32_t length){
-	
+void pmm_free(void* paddr, uint32_t blocks){
+	for(int i = 0; i < blocks; i++){
+		bitmap_clearb((uint32_t)paddr / block_size / 8 + i);
+	}
 }

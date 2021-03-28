@@ -17,7 +17,11 @@ void kmain(struct multiboot_info* mboot_info)
 	cls();
 	init_bitmap(multiboot);
 	populate_bitmap(multiboot);
-	printhex((uint32_t)pmm_alloc(1));
+	void* addr = pmm_alloc(1);
+	printhex((uint32_t)addr);
+	printhex(bitmap_testb((uint32_t)addr / block_size / 8));
+	pmm_free(addr, 1);
+	printhex(bitmap_testb((uint32_t)addr / block_size / 8));
 
 	while(1);
 
