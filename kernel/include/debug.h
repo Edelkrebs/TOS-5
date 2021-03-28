@@ -12,10 +12,15 @@ void printregs();
 
 uint32_t warn(const char* str);
 uint32_t error(const char* str);
+uint32_t panic(const char* message);
 
 void cls();
 uint32_t putch(char c);
 uint32_t print(const char* str);
 uint32_t println(const char* str);
+
+static inline void assert(uint32_t condition, const char* message){
+	if(condition) panic(message);
+}
 
 #endif

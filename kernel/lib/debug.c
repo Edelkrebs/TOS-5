@@ -102,6 +102,21 @@ void printregs(){
 	printreg(3);
 }
 
+
+uint32_t putch(char c){
+	return kputch(c, row, column);
+}
+
+uint32_t println(const char* str){
+	int i = printk(str, row, column);
+	i &= kputch('\n', row, column);
+	return i;
+}
+
+uint32_t print(const char* str){
+	return printk(str, row, column);
+}
+
 uint32_t warn(const char* str){
 	uint32_t t_color = text_color;
 	set_text_color(VGA_LIGHT_CYAN);
@@ -121,24 +136,19 @@ uint32_t error(const char* str){
 	return i & j;
 }
 
+void panic(const char* message){
+	error("KERNEL PANICED! With message: ");
+	set_text_color(VGA_RED);
+	println(message);
+	set_text_color(VGA_WHITE);
+
+	while(1);
+}
+
 void cls(){
 	for(int i = 0; i <= width * height; i++){
 		*((uint16_t*) 0xb8000 + i) = generate_entry(' ', text_color_attrib);
 	}
 	row = 0;
 	column = 0;
-}
-
-uint32_t putch(char c){
-	return kputch(c, row, column);
-}
-
-uint32_t println(const char* str){
-	int i = printk(str, row, column);
-	i &= kputch('\n', row, column);
-	return i;
-}
-
-uint32_t print(const char* str){
-	return printk(str, row, column);
 }
