@@ -21,7 +21,7 @@ void bitmap_clearb(uint32_t index){
 	bitmap[index / 8] &= ~(1 << (index % 8));
 }
 
-uint32_t bitmap_testb(uint32_t index){
+uint32_t bitmap_getb(uint32_t index){
 	return !!(bitmap[index / 8] & (1 << (index % 8)));
 }
 
@@ -100,22 +100,24 @@ void* pmm_alloc(uint32_t size){
 
 	int count = 0;
 	for(int i = 0; i < block_limit; i++){
-		for(int j = 0; j < blocks_to_alloc; j++){
-			if(bitmap_testb(i + j) == 0){
-				count++;
-				if(count == blocks_to_alloc){
-					print("Did it\n");
-					printhex(count);
-					return (void*)((i) * block_size);
-				}
-			}else{
-				count = 0;
-				break;
-			}		
+		if(bitmap_getb(i) == 0){	
+			for(int j = 0; j < blocks_to_alloc; j++){
+				if(bitmap_getb(i + j) == 0){
+					count++;
+					if(count == blocks_to_alloc){
+						print("Did it\n");
+						printhex(count);
+						return (void*)((i) * block_size);
+					}
+				}else{
+					count = 0;
+					break;
+				}		
+			}
 		}
 	}
 	
-	panic("Couldnt allocate memory!EEE");
+	panic("Couldnt allocate memory!");
 																	
 	return (void*) 0;	
 }

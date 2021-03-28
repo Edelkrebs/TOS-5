@@ -17,7 +17,7 @@ uint32_t kernel_size;
 
 void bitmap_setb(uint32_t index);
 void bitmap_clearb(uint32_t index);
-uint32_t bitmap_testb(uint32_t index);
+uint32_t bitmap_getb(uint32_t index);
 
 void init_bitmap(struct multiboot_info* mboot);
 void populate_bitmap(struct multiboot_info* mboot);
