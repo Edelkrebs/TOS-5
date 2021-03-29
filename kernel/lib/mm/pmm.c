@@ -35,15 +35,6 @@ void init_bitmap(struct multiboot_info* mboot){
 		memory_length += entry->len;;
 	}
 
-	print("Total memory: ");
-	printhex64(memory_length);
-	print("Kernel start: ");
-	printhex((uint32_t)&_kernel_start);
-	print("Kernel end: ");
-	printhex((uint32_t)&_kernel_end);
-	print("Kernel size: ");
-	printhex(kernel_size);
-
 	block_size = 4096;
 	block_limit = memory_length / block_size;
 	bitmap_size = memory_length / block_size / 8;
@@ -96,8 +87,6 @@ void* pmm_alloc(uint32_t size){
 
 	uint32_t blocks_to_alloc = round_up(size, block_size) / block_size;
 
-	printhex(blocks_to_alloc);
-
 	int count = 0;
 	for(int i = 0; i < block_limit; i++){
 		if(bitmap_getb(i) == 0){	
@@ -105,8 +94,6 @@ void* pmm_alloc(uint32_t size){
 				if(bitmap_getb(i + j) == 0){
 					count++;
 					if(count == blocks_to_alloc){
-						print("Did it\n");
-						printhex(count);
 						return (void*)((i) * block_size);
 					}
 				}else{

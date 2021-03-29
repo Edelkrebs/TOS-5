@@ -3,6 +3,7 @@
 #include <stdint.h>
 
 #include <mm/pmm.h>
+#include <mm/vmm.h>
 #include <debug.h>
 #include <terminal.h>
 #include <util/maths.h>
@@ -17,6 +18,7 @@ void kmain(struct multiboot_info* mboot_info)
 	cls();
 	init_bitmap(multiboot);
 	populate_bitmap(multiboot);
+	init_vmm();
 
 	while(1);
 
