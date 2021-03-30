@@ -8,6 +8,9 @@ void init_vmm(){
 		page_directory[i] = 0;
 	}
 	pt_start = (uint32_t*)pmm_alloc(1024 * 4096);
+	for(int i = 0; i < 1024 * 1024; i++){
+		pt_start[i] = 0;
+	}
 	printhex((uint32_t)pt_start);
 }
 
@@ -30,5 +33,7 @@ void map_page(void* vaddr, void* paddr, uint16_t flags){
 	}
 
 	pt[ptindex] = ((uint32_t)paddr) | (flags & 0xFFF) | 1;
+
+	printhex(pt[ptindex]);
 	
 }
