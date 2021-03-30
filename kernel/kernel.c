@@ -18,6 +18,7 @@ void kmain(struct multiboot_info* mboot_info)
 	cls();
 	init_bitmap(multiboot);
 	populate_bitmap(multiboot);
+
 	init_vmm();
 
 	while(1);

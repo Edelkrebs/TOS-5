@@ -3,32 +3,32 @@
 #include <debug.h>
 
 void init_vmm(){
-	for(int i = 0; i < 4096 / sizeof(page_directory); i++){
+	page_directory = (uint32_t*) pmm_alloc(4096);
+	for(int i = 0; i < 4096 / 4; i++){ // zero out page directory
 		page_directory[i] = 0;
 	}
+	pt_start = (uint32_t*)pmm_alloc(1024 * 4096);
+	printhex((uint32_t)pt_start);
 }
 
 static void create_pdentry(uint32_t index, void* ptaddr, uint16_t flags){
-	page_directory[index] = (uint32_t)(((uint32_t)ptaddr << 11) | flags);
-}
-
-void* vaddr_to_paddr(void* vaddr){
-	return (void*) 0;
+	page_directory[index] = ((uint32_t)ptaddr / 4096) << 12 | flags | 1;
 }
 
 void map_page(void* vaddr, void* paddr, uint16_t flags){
-	uint32_t pd_index = (uint32_t) vaddr >> 22;
-	uint32_t pt_index = (uint32_t) vaddr >> 12 & 0x03FF;
+	uint32_t pdindex = (uint32_t) vaddr >> 22;
+	uint32_t ptindex = (uint32_t) vaddr >> 12 & 0x3FF;
 
-	if(!(page_directory[pd_index] & 0x1)){
-		create_pdentry(pd_index, (void*)((uint32_t)pmm_alloc(4096) / 4096), 0x1);
+	if((page_directory[pdindex] & 1) == 0){
+		create_pdentry(pdindex, (void*)((uint32_t)pt_start + (4096 * pdindex + ptindex * 4)), 0x1);		
+	}		
+
+	uint32_t* pt = (uint32_t*)((uint32_t)pt_start + (pdindex * 4096));
+
+	if((pt[ptindex] & 1) == 1){
+		panic("Trying to allocate a page twice!");
 	}
 
-	uint32_t* pt = (uint32_t*) ((page_directory[pd_index] >> 12) * 4096);
-
-	if(!(pt[pt_index] & 0x1)){
-		return;	
-	}
-
-	pt[pt_index] = ((uint32_t) ((uint32_t)paddr / 4096) << 12) | (flags & 0xFFF) | 0x1;  
+	pt[ptindex] = ((uint32_t)paddr) | (flags & 0xFFF) | 1;
+	
 }
