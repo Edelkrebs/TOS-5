@@ -93,6 +93,7 @@ void* pmm_alloc(uint32_t size){
 			for(int j = 0; j < blocks_to_alloc; j++){
 				if(bitmap_getb(i + j) == 0){
 					count++;
+					bitmap_setb(i + j);
 					if(count == blocks_to_alloc){
 						return (void*)((i) * block_size);
 					}
