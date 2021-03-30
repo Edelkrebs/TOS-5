@@ -21,7 +21,7 @@ void kmain(struct multiboot_info* mboot_info)
 
 	init_vmm();
 
-	map_page((void*) 0x1000, (void*) 0, 0x3);
+	
 
 	while(1);
 
