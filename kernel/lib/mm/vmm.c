@@ -58,3 +58,8 @@ void identity_map(void* vaddr, uint32_t number_of_pages, uint16_t flags){
 	}
 	
 }
+
+void activate_paging(void* page_directory){
+	__asm__ volatile ("mov %%cr3, %0;" :: "r" (page_directory));
+	__asm__ volatile ("mov %%cr0, %0;" :: "r" (0x80010001));
+}

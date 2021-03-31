@@ -22,7 +22,7 @@ image: all
 	cp $(BIN) iso/boot/tos-5.bin
 	cp grub.cfg iso/boot/grub/grub.cfg
 	grub-mkrescue -o $(ISO) iso
-	qemu-system-i386 -cdrom $(ISO) -m 1G -no-reboot -monitor stdio -d int -D log/qlog.txt -no-shutdown
+	qemu-system-i386 -cdrom $(ISO) -m 1G -no-reboot -monitor stdio -d int -no-shutdown
 	
 kernel: $(OBJECTS)
 	$(CC) $(LDFLAGS) $^ -o $(BIN) 

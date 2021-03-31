@@ -12,4 +12,6 @@ void identity_map(void* addr, uint32_t number_of_pages, uint16_t flags);
 void map_page(void* vaddr, void* paddr, uint16_t flags);
 void unmap_page(void* paddr);
 
+void activate_paging(void* page_directory);
+
 #endif
