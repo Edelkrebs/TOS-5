@@ -20,9 +20,10 @@ void kmain(struct multiboot_info* mboot_info)
 	populate_bitmap(multiboot);
 
 	init_vmm();
+	identity_map((void*) 0, 64, 3);
 
+	printhex((uint32_t)get_paddr((uint32_t*) 0x10000));	
 	
-
 	while(1);
 
 }
