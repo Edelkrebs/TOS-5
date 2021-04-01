@@ -14,7 +14,7 @@ CC = i686-elf-gcc
 all: kernel 	
 run: all
 	mkdir -p log
-	qemu-system-i386 -m 1G -kernel $(BIN) -d int -D log/qlog.txt -no-shutdown -no-reboot
+	qemu-system-i386 -m 1G -kernel $(BIN) -d int -no-shutdown -no-reboot
 
 image: all
 	mkdir -p iso/boot/grub
