@@ -23,14 +23,16 @@ global _start:function (_start.end - _start)
 _start:
 
 	mov esp, stack_top
+
+	cli
 	
 	mov eax, cr0
 	or eax, 1
 	mov cr0, eax
 
-	lgdt [gdt_attribs]
+	lgdt [gdt_attribs - 0xC0000000]
 
-	jmp 0x8:_start.pm
+	jmp 0x8:_start.pm - 0xC0000000
 .pm:
 	mov ax, 0x10
 	mov ds, ax
@@ -39,9 +41,16 @@ _start:
 	mov gs, ax
 	mov ss, ax
 
-	push ebx
-	extern kmain
-	call kmain
+;	lea eax, [page_directory - 0xC0000000]
+;	mov cr3, eax
+
+;	mov eax, cr0
+;	or eax, 0x80010001
+;	mov cr0, eax
+
+;	push ebx
+;	extern kmain
+;	call kmain
 
 .hang:
 	hlt
@@ -69,5 +78,10 @@ data:
 gdt_end:
 
 gdt_attribs:
-	dw gdt_end - gdt - 1
-	dd gdt
+	dw gdt_end - 0xC0000000 - gdt - 0xC0000000 - 1
+	dd gdt - 0xC0000000
+
+page_directory: 
+	times 1024 dd 0
+
+	

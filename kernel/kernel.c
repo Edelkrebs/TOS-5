@@ -35,15 +35,18 @@ void kmain(struct multiboot_info* mboot_info)
 
 	identity_map((void*) 0, 64, 3);
 
-	map_page((void*) 0xC0000000, (void*) 0x100000, 0x3);
-	map_page((void*) 0xC0001000, (void*) 0x101000, 0x3);
-	map_page((void*) 0xC0002000, (void*) 0x102000, 0x3);
-	map_page((void*) 0xC0003000, (void*) 0x103000, 0x3);
-	map_page((void*) 0xC0004000, (void*) 0x104000, 0x3);
-	map_page((void*) 0xC0005000, (void*) 0x105000, 0x3);
-	map_page((void*) 0xC0006000, (void*) 0x106000, 0x3);
+	map_page((void*) 0x100000, (void*) 0x100000, 0x3);
+	map_page((void*) 0x101000, (void*) 0x101000, 0x3);
+	map_page((void*) 0x102000, (void*) 0x102000, 0x3);
+	map_page((void*) 0x103000, (void*) 0x103000, 0x3);
+	map_page((void*) 0x104000, (void*) 0x104000, 0x3);
+	map_page((void*) 0x105000, (void*) 0x105000, 0x3);
+	map_page((void*) 0x106000, (void*) 0x106000, 0x3);
+
+	map_page((void*) 0xb8000, (void*) 0xb8000, 0x3);
 
 	activate_paging((void*)page_directory);
+	printhex(0x1234);
 
 	while(1);
 
