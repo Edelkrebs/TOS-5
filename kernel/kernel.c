@@ -2,15 +2,24 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#include <terminal.h>
+#include <mm/pmm.h>
+#include <mm/vmm.h>
 #include <debug.h>
+#include <terminal.h>
+#include <util/maths.h>
 
-void kmain(void) 
+struct multiboot_info* multiboot;
+
+void kmain(struct multiboot_info* mboot_info) 
 {
+	multiboot = mboot_info;
 
 	init_terminal(VGA_WHITE, VGA_BLACK);
 	cls();
-	printregs();
-	error("KERNEL PANICED!");
+	init_bitmap(multiboot);
+	populate_bitmap(multiboot);
+	init_vmm();
+
+	while(1);
 
 }

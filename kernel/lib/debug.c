@@ -46,9 +46,9 @@ uint32_t kputch(char c, uint32_t r, uint32_t col){
 }
 
 uint32_t printhex(uint32_t number){
-	char* str =  "0x00000000";
+	char* str =  "0x00000000\0";
 	uint32_t numbercpy = number;
-	for(int i = 9; i > 4; i--){
+	for(int i = 9; i > 1; i--){
 		number = numbercpy;
 		numbercpy = numbercpy >> 4;
 		number &= 0xF;
@@ -58,6 +58,21 @@ uint32_t printhex(uint32_t number){
 	printk(str, row, column);
 	kputch('\n', row, column);
 	return 1;
+}
+
+uint32_t printhex64(uint64_t number){
+	char* str =  "0x0000000000000000\0";
+	uint64_t numbercpy = number;
+	for(int i = 17; i > 1; i--){
+		number = numbercpy;
+		numbercpy = numbercpy >> 4;
+		number &= 0xF;
+		if(number > 9) str[i] = number + 'A' - 10;
+		else str[i] = number + '0';
+	}
+	printk(str, row, column);
+	kputch('\n', row, column);
+	return 1;	
 }
 
 void printreg(uint8_t reg){
@@ -87,6 +102,21 @@ void printregs(){
 	printreg(3);
 }
 
+
+uint32_t putch(char c){
+	return kputch(c, row, column);
+}
+
+uint32_t println(const char* str){
+	int i = printk(str, row, column);
+	i &= kputch('\n', row, column);
+	return i;
+}
+
+uint32_t print(const char* str){
+	return printk(str, row, column);
+}
+
 uint32_t warn(const char* str){
 	uint32_t t_color = text_color;
 	set_text_color(VGA_LIGHT_CYAN);
@@ -106,24 +136,19 @@ uint32_t error(const char* str){
 	return i & j;
 }
 
+void panic(const char* message){
+	error("KERNEL PANICED! With message: ");
+	set_text_color(VGA_RED);
+	println(message);
+	set_text_color(VGA_WHITE);
+
+	while(1);
+}
+
 void cls(){
 	for(int i = 0; i <= width * height; i++){
 		*((uint16_t*) 0xb8000 + i) = generate_entry(' ', text_color_attrib);
 	}
 	row = 0;
 	column = 0;
-}
-
-uint32_t putch(char c){
-	return kputch(c, row, column);
-}
-
-uint32_t println(const char* str){
-	int i = printk(str, row, column);
-	i &= kputch('\n', row, column);
-	return i;
-}
-
-uint32_t print(const char* str){
-	return printk(str, row, column);
 }
